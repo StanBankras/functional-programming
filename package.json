@@ -1,0 +1,17 @@
+{
+  "name": "functional-programming",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": "git@github.com:StanBankras/functional-programming.git",
+  "author": "Stan Bankras <stanbankras@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "axios": "^0.20.0"
+  }
+}
