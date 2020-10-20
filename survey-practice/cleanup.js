@@ -3,15 +3,12 @@ import * as kleuren from '../data/kleuren.json';
 import isColor from 'is-color';
 import rgbHex from 'rgb-hex';
 
-// ============================
-// Clean up 'Kleur ogen' column
-// ============================
-
 const data = Object.values(json);
-const colors = Object.values(kleuren.default);
-const validColors = [];
+const colors = kleuren.default;
 
 export function cleanEyeColor() {
+  const validColors = [];
+
   data.forEach(async (x) => {
     let oogKleur = x.oogKleur;
   
@@ -27,20 +24,41 @@ export function cleanEyeColor() {
   
     // Replace rgb color with Hex
     if(oogKleur.startsWith('rgb')) {
-      oogKleur.split('.').join(',');
       oogKleur = '#' + rgbHex(oogKleur);
     }
   
-    if(colors.find(y => y.name === oogKleur.toLowerCase())) oogKleur = colors.find(y => y.name === oogKleur.toLowerCase()).hex;
+    if(!!colors[oogKleur.toLowerCase()]) oogKleur = colors[oogKleur.toLowerCase()];
   
     if(!isColor(oogKleur)) return console.log('niet ' + oogKleur);
   
     validColors.push(oogKleur);
   });
   
-  return validColors;
+  return [validColors, validColors.length];
 }
 
-// ============================
-// Clean up 'Kleur ogen' column
-// ============================
+export function cleanPets() {
+  const petsArray = [];
+
+  data.forEach(x => {
+    let pets = x.huisDieren;
+
+    // Remove wrong values
+    if(!pets) return;
+    if(pets.toLowerCase().includes('geen')) return;
+    if(pets.length < 2) return;
+    if(pets === 'N>V>T>') return;
+
+    // Split strings into substrings
+    pets = pets.split(' ').join('');
+    pets = pets.split(',').join('.').split(':').join('.').split('.');
+    pets = pets.filter(x => x !== '');
+
+    if(pets.length === 1) pets = { name: null, pet: pets[0] };
+    if(pets.length === 2) pets = { name: pets[0], pet: pets[1] };
+
+
+    petsArray.push(pets);
+  })
+  return [petsArray, petsArray.length];
+}
