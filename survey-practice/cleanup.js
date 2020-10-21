@@ -1,10 +1,12 @@
 import * as json from '../data/survey.json';
 import * as kleuren from '../data/kleuren.json';
+import * as huisdieren from '../data/huisdieren.json';
 import isColor from 'is-color';
 import rgbHex from 'rgb-hex';
 
 const data = Object.values(json);
 const colors = kleuren.default;
+const animals = huisdieren.default;
 
 export function cleanEyeColor() {
   const validColors = [];
@@ -45,8 +47,7 @@ export function cleanPets() {
 
     // Remove wrong values
     if(!pets) return;
-    if(pets.toLowerCase().includes('geen')) return;
-    if(pets.length < 2) return;
+    if(pets.toLowerCase().includes('geen')) return petsArray.push({});
     if(pets === 'N>V>T>') return;
 
     // Split strings into substrings
@@ -54,11 +55,19 @@ export function cleanPets() {
     pets = pets.split(',').join('.').split(':').join('.').split('.');
     pets = pets.filter(x => x !== '');
 
-    if(pets.length === 1) pets = { name: null, pet: pets[0] };
-    if(pets.length === 2) pets = { name: pets[0], pet: pets[1] };
+    // Separate pet given names and real animal type name
+    const animalNames = pets.slice().filter(y => animals.includes(y.toLowerCase()));
+    const names = pets.slice().filter(y => !animals.includes(y.toLowerCase()));
 
+    const combinations = [];
 
-    petsArray.push(pets);
+    // Combine pet given names and pet names in objects
+    animalNames.forEach((animal, index) => {
+      if(!names[index]) return combinations.push({ name: null, pet: animal });
+      combinations.push({ name: names[index], pet: animal });
+    });
+
+    petsArray.push(combinations);
   })
-  return [petsArray, petsArray.length];
+  return petsArray;
 }
