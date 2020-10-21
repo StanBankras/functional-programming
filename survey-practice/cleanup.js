@@ -33,8 +33,8 @@ function eyeColor() {
 
 function pets() {
   return data.map(x => x.huisDieren).filter(x => !!x).map(pets => {
-    if(pets.toLowerCase().includes('geen')) return {};
-    if(pets === 'N>V>T>') return {};
+    if(pets.toLowerCase().includes('geen')) return [];
+    if(pets === 'N>V>T>') return [];
 
     // Split strings into substrings
     pets = pets.split(' ').join('');
