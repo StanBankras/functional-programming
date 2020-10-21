@@ -8,7 +8,7 @@ const data = Object.values(json);
 const colors = kleuren.default;
 const animals = huisdieren.default;
 
-export function cleanEyeColor() {
+function eyeColor() {
   return data.map(x => {
     let oogKleur = x.oogKleur;
     if(!oogKleur) return;
@@ -33,8 +33,7 @@ export function cleanEyeColor() {
     return oogKleur;
   });
 }
-
-export function cleanPets() {
+function pets() {
   return data.map(x => {
     let pets = x.huisDieren;
 
@@ -60,3 +59,5 @@ export function cleanPets() {
     return combinations;
   });
 }
+
+export default { eyeColor, pets };

@@ -1,4 +1,3 @@
-import { cleanEyeColor, cleanPets } from './survey-practice/cleanup';
+import clean from './survey-practice/cleanup';
 
-console.log(cleanEyeColor(), cleanEyeColor().length);
-console.log(JSON.stringify(cleanPets()));
+console.log(clean.pets());
