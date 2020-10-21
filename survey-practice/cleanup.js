@@ -9,11 +9,8 @@ const colors = kleuren.default;
 const animals = huisdieren.default;
 
 export function cleanEyeColor() {
-  const validColors = [];
-
-  data.forEach(x => {
+  return data.map(x => {
     let oogKleur = x.oogKleur;
-  
     if(!oogKleur) return;
   
     // Remove spaces
@@ -31,24 +28,20 @@ export function cleanEyeColor() {
   
     if(!!colors[oogKleur.toLowerCase()]) oogKleur = colors[oogKleur.toLowerCase()];
   
-    if(!isColor(oogKleur)) return console.log('niet ' + oogKleur);
+    if(!isColor(oogKleur)) return;
   
-    validColors.push(oogKleur);
+    return oogKleur;
   });
-  
-  return [validColors, validColors.length];
 }
 
 export function cleanPets() {
-  const petsArray = [];
-
-  data.forEach(x => {
+  return data.map(x => {
     let pets = x.huisDieren;
 
     // Remove wrong values
-    if(!pets) return;
-    if(pets.toLowerCase().includes('geen')) return petsArray.push({});
-    if(pets === 'N>V>T>') return petsArray.push({});
+    if(!pets) return null;
+    if(pets.toLowerCase().includes('geen')) return {};
+    if(pets === 'N>V>T>') return {};
 
     // Split strings into substrings
     pets = pets.split(' ').join('');
@@ -62,12 +55,8 @@ export function cleanPets() {
     const combinations = [];
 
     // Combine pet given names and pet names in objects
-    animalNames.forEach((animal, index) => {
-      if(!names[index]) return combinations.push({ name: null, pet: animal });
-      combinations.push({ name: names[index], pet: animal });
-    });
+    animalNames.forEach((animal, index) => names[index] ? combinations.push({ name: names[index], pet: animal }) : combinations.push({ name: null, pet: animal }));
 
-    petsArray.push(combinations);
-  })
-  return petsArray;
+    return combinations;
+  });
 }
