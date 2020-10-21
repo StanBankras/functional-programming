@@ -9,10 +9,7 @@ const colors = kleuren.default;
 const animals = huisdieren.default;
 
 function eyeColor() {
-  return data.map(x => {
-    let oogKleur = x.oogKleur;
-    if(!oogKleur) return;
-  
+  return data.map(x => x.oogKleur).filter(x => !!x).map(oogKleur => {
     // Remove spaces
     oogKleur = oogKleur.split(' ').join('');
   
@@ -33,12 +30,9 @@ function eyeColor() {
     return oogKleur;
   });
 }
-function pets() {
-  return data.map(x => {
-    let pets = x.huisDieren;
 
-    // Remove wrong values
-    if(!pets) return null;
+function pets() {
+  return data.map(x => x.huisDieren).filter(x => !!x).map(pets => {
     if(pets.toLowerCase().includes('geen')) return {};
     if(pets === 'N>V>T>') return {};
 
