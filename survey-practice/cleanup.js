@@ -11,7 +11,7 @@ const animals = huisdieren.default;
 export function cleanEyeColor() {
   const validColors = [];
 
-  data.forEach(async (x) => {
+  data.forEach(x => {
     let oogKleur = x.oogKleur;
   
     if(!oogKleur) return;
@@ -48,7 +48,7 @@ export function cleanPets() {
     // Remove wrong values
     if(!pets) return;
     if(pets.toLowerCase().includes('geen')) return petsArray.push({});
-    if(pets === 'N>V>T>') return;
+    if(pets === 'N>V>T>') return petsArray.push({});
 
     // Split strings into substrings
     pets = pets.split(' ').join('');
