@@ -38,8 +38,7 @@ function pets() {
     if(pets === 'N>V>T>') return [];
 
     // Split strings into substrings
-    pets = replaceOccurences(pets, ' ', '');
-    pets = replaceMultipleOccurences(pets, [',', '.', ':'], '.').split('.');
+    pets = replaceMultipleOccurences(pets, [',', '.', ':', ' '], '.').split('.');
     pets = pets.filter(x => x !== '');
 
     // Separate pet given names and real animal type name
