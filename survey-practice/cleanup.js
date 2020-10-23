@@ -39,7 +39,6 @@ function pets() {
 
     // Split strings into substrings
     pets = replaceMultipleOccurences(pets, [',', '.', ':', ' '], '.').split('.');
-    pets = pets.filter(x => x !== '');
 
     // Separate pet given names and real animal type name
     const animalNames = pets.filter(y => animals.includes(y.toLowerCase()));
