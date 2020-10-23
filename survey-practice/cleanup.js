@@ -1,6 +1,7 @@
 import * as json from '../data/survey.json';
 import * as kleuren from '../data/kleuren.json';
 import * as huisdieren from '../data/huisdieren.json';
+import { replaceOccurences, replaceMultipleOccurences } from '../utils';
 import isColor from 'is-color';
 import rgbHex from 'rgb-hex';
 
@@ -11,7 +12,7 @@ const animals = huisdieren.default;
 function eyeColor() {
   return data.map(x => x.oogKleur).filter(x => !!x).map(oogKleur => {
     // Remove spaces
-    oogKleur = oogKleur.split(' ').join('');
+    oogKleur = replaceOccurences(oogKleur, ' ', '')
   
     // Hex codes without # get #
     if(!oogKleur.startsWith('#')) {
@@ -37,13 +38,13 @@ function pets() {
     if(pets === 'N>V>T>') return [];
 
     // Split strings into substrings
-    pets = pets.split(' ').join('');
-    pets = pets.split(',').join('.').split(':').join('.').split('.');
+    pets = replaceOccurences(pets, ' ', '');
+    pets = replaceMultipleOccurences(pets, [',', '.', ':'], '.').split('.');
     pets = pets.filter(x => x !== '');
 
     // Separate pet given names and real animal type name
-    const animalNames = pets.slice().filter(y => animals.includes(y.toLowerCase()));
-    const names = pets.slice().filter(y => !animals.includes(y.toLowerCase()));
+    const animalNames = pets.filter(y => animals.includes(y.toLowerCase()));
+    const names = pets.filter(y => !animals.includes(y.toLowerCase()));
 
     const combinations = [];
 
