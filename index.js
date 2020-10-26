@@ -1,7 +1,7 @@
 import clean from './cleanup.js';
-import apiData from './apiData.js';
+import apiData from './apidata.js';
 
-apiData.useData('https://opendata.rdw.nl/resource/qtex-qwd8.json?$limit=15000').then(data => console.log(data));
+apiData.getDatasets().then(data => console.log(data));
 
 /*
 
@@ -18,10 +18,11 @@ Code idea:
     - Amount of charging points
     - (max) park time
     - Tariffs
-2. Create two different arrays:
-    - Parking spots in environment zones
+2. Gather the environment zone coordinates in polygon
+3. Create two different arrays:
+    - Parking spots in environment zones (https://github.com/substack/point-in-polygon)
     - Parking spots outside environment zones
-3. For both arrays, transform the data so there are arrays of objects with the needed data
+4. For both arrays, transform the data so there are arrays of objects with the needed data
 
 
 */

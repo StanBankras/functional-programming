@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+dotenv.config();
+
+const token = '$$app_token=' + process.env.OPENDATA_RDW_APPTOKEN;
 
 // Replace all occurences of the <replace> parameters in the <string> by the <replaceBy> parameter
 export function replaceOccurences(string, replace, replaceBy) {
@@ -11,4 +16,17 @@ export function replaceMultipleOccurences(string, replaceArray, replaceBy) {
   return replaceString;
 }
 
-export default { replaceOccurences, replaceMultipleOccurences };
+export async function getData(uriString) {
+  let uri = uriString;
+  if(uri.endsWith('json')) {
+    uri = uri + '?' + token;
+  } else {
+    uri = uri + '&' + token;
+  }
+
+  const result = await fetch(uri);
+  const data = await result.json();
+  return data;
+}
+
+export default { replaceOccurences, replaceMultipleOccurences, getData };
