@@ -18,10 +18,12 @@ export function replaceMultipleOccurences(string, replaceArray, replaceBy) {
 
 export async function getData(uriString) {
   let uri = uriString;
-  if(uri.endsWith('json')) {
-    uri = uri + '?' + token;
-  } else {
-    uri = uri + '&' + token;
+  if(uri.includes('opendata')) {
+    if(uri.endsWith('json')) {
+      uri = uri + '?' + token;
+    } else {
+      uri = uri + '&' + token;
+    }
   }
 
   const result = await fetch(uri);
