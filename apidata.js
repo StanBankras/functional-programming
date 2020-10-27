@@ -1,5 +1,6 @@
 import { getData } from './utils';
 
+// Gets datasets from endpoints and waits till all are retrieved, then calls the function to combine this data
 function newDataset(endpoints) {
   const promises = endpoints.map(x => getData(x));
 

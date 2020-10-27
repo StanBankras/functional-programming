@@ -34,5 +34,9 @@ npm run dev
 yarn dev
 ```
 
+## Acknowledgements
+* [TimonWeb](https://timonweb.com/javascript/how-to-enable-es6-imports-in-nodejs/) for setting up my Node development environment where I could use ES6 functionality
+* [StackOverflow](https://stackoverflow.com/) for small & quick bug fixes
+
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
