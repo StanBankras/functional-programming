@@ -1,10 +1,9 @@
 import { getData } from './utils';
 
-function getDatasets() {
-  const areaSpecifications = getData('https://opendata.rdw.nl/resource/b3us-f26s.json');
-  const area = getData('https://opendata.rdw.nl/resource/qtex-qwd8.json');
+function newDataset(datasets) {
+  const promises = datasets.map(x => getData(x));
 
-  return Promise.all([areaSpecifications, area]).then((values) => {
+  return Promise.all(promises).then((values) => {
     return combineDatasets(values, 'areaid');
   });
 }
@@ -17,7 +16,7 @@ function combineDatasets(datasets, sharedKey) {
       const existing = map[obj[sharedKey]];
 
       if(!!existing) {
-        Object.keys(obj).filter(key => typeof existing[key] === 'undefined').forEach(key => existing[key] = obj[key]);
+        Object.keys(obj).filter(key => typeof existing[key] === 'undefined').forEach(key => map[obj[sharedKey]][key] = obj[key]);
       } else {
         map[obj[sharedKey]] = obj;
       }
@@ -25,8 +24,7 @@ function combineDatasets(datasets, sharedKey) {
   });
 
   const values = Object.values(map);
-
   return values;
 }
 
-export default { getDatasets };
+export default { newDataset };
