@@ -1,7 +1,7 @@
 import clean from './cleanup.js';
 import apiData from './apidata.js';
 
-apiData.newDataset(['https://opendata.rdw.nl/resource/r3rs-ibz5.json', 'https://opendata.rdw.nl/resource/qtex-qwd8.json']).then(data => console.log(data));
+apiData.newDataset(['https://opendata.rdw.nl/resource/r3rs-ibz5.json', 'https://opendata.rdw.nl/resource/qtex-qwd8.json', 'https://opendata.rdw.nl/resource/nsk3-v9n7.json']).then(data => console.log(data));
 
 /*
 
