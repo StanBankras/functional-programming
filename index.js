@@ -2,11 +2,13 @@ import clean from './cleanup.js';
 import apiData from './apidata.js';
 import esri from './esri';
 
-const geoDataEndpoint = 'https://opendata.rdw.nl/resource/nsk3-v9n7.json';
-const chargingPointEndpoint = 'https://opendata.rdw.nl/resource/b3us-f26s.json';
+// const geoDataEndpoint = 'https://opendata.rdw.nl/resource/nsk3-v9n7.json';
+// const chargingPointEndpoint = 'https://opendata.rdw.nl/resource/b3us-f26s.json';
 
 // apiData.newDataset([geoDataEndpoint, chargingPointEndpoint], 'areaid')
 //   .then(data => console.log(data.filter(x => x.areageometryastext)));
+
+esri.getEnvironmentalZones().then(result => console.log(result));
 
 /*
 
