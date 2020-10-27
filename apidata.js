@@ -1,11 +1,11 @@
 import { getData } from './utils';
 
 // Gets datasets from endpoints and waits till all are retrieved, then calls the function to combine this data
-function newDataset(endpoints) {
+function newDataset(endpoints, sharedKey) {
   const promises = endpoints.map(x => getData(x));
 
   return Promise.all(promises).then((values) => {
-    return combineDatasets(values, 'areaid');
+    return combineDatasets(values, sharedKey);
   });
 }
 

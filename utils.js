@@ -29,6 +29,7 @@ export async function getData(uriString) {
 
   const result = await fetch(uri);
   const data = await result.json();
+  console.log(data);
   return data;
 }
 

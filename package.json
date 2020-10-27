@@ -10,8 +10,12 @@
   "author": "Stan Bankras <stanbankras@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@esri/arcgis-rest-auth": "^2.20.0",
+    "@esri/arcgis-rest-request": "^2.20.0",
+    "cross-fetch": "^3.0.6",
     "dotenv": "^8.2.0",
     "is-color": "^1.0.2",
+    "isomorphic-form-data": "^2.0.0",
     "node-fetch": "^2.6.1",
     "rgb-hex": "^3.0.0"
   },
