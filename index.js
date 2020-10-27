@@ -8,7 +8,7 @@ import esri from './esri';
 // apiData.newDataset([geoDataEndpoint, chargingPointEndpoint], 'areaid')
 //   .then(data => console.log(data.filter(x => x.areageometryastext)));
 
-esri.getEnvironmentalZones().then(result => console.log(result));
+esri.getEnvironmentalZones().then(result => console.log(JSON.stringify(result)));
 
 /*
 
