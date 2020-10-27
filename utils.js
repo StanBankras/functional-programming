@@ -16,6 +16,7 @@ export function replaceMultipleOccurences(string, replaceArray, replaceBy) {
   return replaceString;
 }
 
+// Fetch data, for Opendata endpoints automatically attach app_token
 export async function getData(uriString) {
   let uri = uriString;
   if(uri.includes('opendata')) {
