@@ -4,16 +4,16 @@ import 'isomorphic-form-data';
 import { request } from '@esri/arcgis-rest-request';
 
 // Found out how to get geojson via: https://gis.stackexchange.com/questions/206313/accessing-geojson-from-arcgis-online-rest-api
-const link = 'https://services.arcgis.com/kE0BiyvJHb5SwQv7/arcgis/rest/services/Milieuzones_NL/FeatureServer/0/query?f=geojson&where=1%3D1&returnGeometry=true';
+const uri = 'https://services.arcgis.com/kE0BiyvJHb5SwQv7/arcgis/rest/services/Milieuzones_NL/FeatureServer/0/query?f=geojson&where=1%3D1&returnGeometry=true';
 
 export async function getEnvironmentalZones() {
-  const data = await request(link);
+  const data = await request(uri);
   let formattedData = data.features.map(feature => {
     const coordinates = feature.geometry.coordinates;
-    let polygons = [];
+    let polygons;
 
     if(feature.geometry.type === 'MultiPolygon') {
-      coordinates.forEach(polygonArray => polygons = [...polygonArray.map(polygon => getPolygons(polygon)), ...polygons]);
+      polygons = coordinates.reduce((prev, curr) => [...curr.map(polygon => getPolygons(polygon)), ...prev], []);
     } else {
       polygons = coordinates.map(polygon => getPolygons(polygon));
     }
@@ -25,7 +25,7 @@ export async function getEnvironmentalZones() {
   });
 
   // Filter duplicate entries (code from: https://stackoverflow.com/a/56757215)
-  formattedData = formattedData.filter((val,i,arr) => arr.findIndex(t => (t.municipality === val.municipality)) === i);
+  formattedData = formattedData.filter((val, i, arr) => arr.findIndex(t => (t.municipality === val.municipality)) === i);
 
   return formattedData;
 }
