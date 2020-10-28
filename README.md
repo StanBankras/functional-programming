@@ -20,6 +20,8 @@ _My expectation:_ environmental zones should promote green transportation, so I 
 
 _My expectation:_ I expect the cost of parking to be higher if there are more charging points installed, because of extra expenses. If the contrary is true, this would be very good since it would support green transportation even more.
 
+[Data I expect to use to answer the questions can be found here](https://github.com/StanBankras/functional-programming/wiki/Concept#data-i-expect-to-use)
+
 
 ## Usage
 If you are cleaning survey data, you might be able to use this project as a template to start writing functional patterns right away. There are some requirements to running this project, which will be explained in the 'Installation' part of the readme.
