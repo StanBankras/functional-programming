@@ -53,7 +53,7 @@ async function mergeAllData() {
       return obj;
     });
 
-    return await Promise.all(filteredData); // received help awaiting the mapping process with async functions from Alex (brother, studies HBO-ICT SE)
+    return await Promise.all(filteredData);
 }
 
 function getEnvironmentalZones() {
