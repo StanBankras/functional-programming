@@ -1,14 +1,47 @@
 import clean from './cleanup.js';
 import apiData from './apidata.js';
 import esri from './esri';
+import { getCenterCoord, isCoordInPolygon } from './utils';
 
-// const geoDataEndpoint = 'https://opendata.rdw.nl/resource/nsk3-v9n7.json';
-// const chargingPointEndpoint = 'https://opendata.rdw.nl/resource/b3us-f26s.json';
+const geoDataEndpoint = 'https://opendata.rdw.nl/resource/nsk3-v9n7.json';
+const keys = {
+  areageometryastext: 'area'
+}
 
-// apiData.newDataset([geoDataEndpoint, chargingPointEndpoint], 'areaid')
-//   .then(data => console.log(data.filter(x => x.areageometryastext)));
+// Start code, retrieves data using Esri about Dutch environmental zones. Same data is used as on milieuzones.nl
+esri.getEnvironmentalZones().then(result => {
+  const polygons = [];
+  result.forEach(x => {
+    x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
+  });
+  mergeAllData(polygons).then(result => console.log(result));
+});
 
-esri.getEnvironmentalZones().then(result => console.log(JSON.stringify(result.find(x => x.municipality === 'Rotterdam'))));
+async function mergeAllData(environmentalZones) {
+  const data = await apiData.newDataset([geoDataEndpoint], 'areaid');
+
+  const filteredData = data
+    .filter(x => Object.keys(keys).every(key => x.hasOwnProperty(key))) // https://stackoverflow.com/a/41439924
+    .map(x => {
+      const obj = {};
+      Object.keys(keys).forEach(key => {
+        return obj[keys[key]] = x[key];
+      });
+      return obj;
+    })
+    .map(x => {
+      const obj = x;
+      obj.centerCoord = getCenterCoord(x.area);
+      return obj;
+    })
+    .map(x => {
+      const obj = x;
+      obj.environmentalZone = isCoordInPolygon(obj.centerCoord, environmentalZones);
+      return obj;
+    });
+
+    return filteredData;
+}
 
 /*
 

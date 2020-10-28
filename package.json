@@ -17,6 +17,7 @@
     "is-color": "^1.0.2",
     "isomorphic-form-data": "^2.0.0",
     "node-fetch": "^2.6.1",
+    "point-in-polygon": "^1.0.1",
     "rgb-hex": "^3.0.0"
   },
   "devDependencies": {

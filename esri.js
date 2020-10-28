@@ -31,7 +31,7 @@ export async function getEnvironmentalZones() {
 }
 
 function getPolygons(geojsonCoordinates) {
-  return geojsonCoordinates.map(x => { return { long: x[1], lat: x[0] } });
+  return geojsonCoordinates.map(x => { return [ x[0], x[1] ] });
 }
 
 export default { getEnvironmentalZones };
