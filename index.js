@@ -3,25 +3,25 @@ import apiData from './apidata.js';
 import esri from './esri';
 import { getCenterCoord, isCoordInPolygon } from './utils';
 
-const geoDataEndpoint = 'https://opendata.rdw.nl/resource/nsk3-v9n7.json';
-const chargingPointEndpoint = 'https://opendata.rdw.nl/resource/b3us-f26s.json';
+const endpoints = [
+  'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
+  'https://opendata.rdw.nl/resource/b3us-f26s.json' // Charging points
+]
 const keys = {
   areageometryastext: 'area',
   chargingpointcapacity: 'chargingPoints'
 }
 const strictKeys = true;
 
-// Start code, retrieves data using Esri about Dutch environmental zones. Same data is used as on milieuzones.nl
-esri.getEnvironmentalZones().then(result => {
-  const polygons = [];
-  result.forEach(x => {
-    x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
-  });
-  mergeAllData(polygons).then(result => console.log(result));
-});
+// Starts the process to get and clean data
+mergeAllData().then(result => console.log(result));
 
-async function mergeAllData(environmentalZones) {
-  const data = await apiData.newDataset([geoDataEndpoint, chargingPointEndpoint], 'areaid');
+async function mergeAllData() {
+  const dataset = apiData.newDataset(endpoints, 'areaid');
+
+  const requestedData = await Promise.all([getEnvironmentalZones(), dataset]);
+  const data = requestedData[1];
+  const environmentalZones = requestedData[0];
 
   const filteredData = data
     .filter(x => Object.keys(keys).every(key => {
@@ -47,6 +47,16 @@ async function mergeAllData(environmentalZones) {
     });
 
     return filteredData;
+}
+
+function getEnvironmentalZones() {
+  return esri.getEnvironmentalZones().then(result => {
+    const polygons = [];
+    result.forEach(x => {
+      x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
+    });
+    return polygons;
+  });
 }
 
 /*
