@@ -37,7 +37,7 @@ export function getCenterCoord(coordinates) {
   const type = coordinates.split(' ')[0];
   let longLat = replaceMultipleOccurences(coordinates, [type + ' (', '(', ')', ','], '').split(' ');
   if(type === 'POINT') {
-    longLat = { lat: Number(longLat[1]), long: Number(longLat[0]) };
+    longLat = [ Number(longLat[0]), Number(longLat[1]) ];
   } else {
     let latTotal = 0;
     let longTotal = 0;
