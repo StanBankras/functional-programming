@@ -23,7 +23,7 @@ export async function getData(uriString) {
   if(uri.includes('opendata')) {
     if(uri.endsWith('json')) {
       uri = uri + '?' + token + '&$limit=20000';
-    } else {
+    } else if(uri.includes('$')) {
       uri = uri + '&' + token + '&$limit=20000';
     }
   }

@@ -1,7 +1,7 @@
 import clean from './cleanup';
 import apiData from './utils/apidata';
 import esri from './utils/esri';
-import { getCenterCoord, isCoordInPolygon } from './utils/general';
+import { getCenterCoord, getData, isCoordInPolygon } from './utils/general';
 
 const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
@@ -10,7 +10,8 @@ const endpoints = [
 const sharedKey = 'areaid';
 const keys = {
   areageometryastext: 'area',
-  chargingpointcapacity: 'chargingPoints'
+  chargingpointcapacity: 'chargingPoints',
+  areaid: 'areaId'
 }
 const strictKeys = true;
 
@@ -45,9 +46,14 @@ async function mergeAllData() {
       const obj = x;
       obj.environmentalZone = isCoordInPolygon(obj.centerCoord, environmentalZones);
       return obj;
+    })
+    .map(async (x) => {
+      const obj = x;
+      obj.tariffs = await getTariffs(obj.areaId);
+      return obj;
     });
 
-    return filteredData;
+    return await Promise.all(filteredData); // received help awaiting the mapping process with async functions from Alex (brother, studies HBO-ICT SE)
 }
 
 function getEnvironmentalZones() {
@@ -58,4 +64,15 @@ function getEnvironmentalZones() {
     });
     return polygons;
   });
+}
+
+async function getTariffs(areaId) {
+  console.log('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId);
+  const uuidReq = await getData('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId); // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-PARKEERGEBIED/mz4f-59fw
+  if(!uuidReq || !uuidReq[0].uuid) return null;
+
+  const uuidData = await getData('https://npropendata.rdw.nl//parkingdata/v2/static/' + uuidReq[0].uuid);
+  if(!uuidData) return null;
+
+  return (uuidData.parkingFacilityInformation.tariffs || []);
 }
