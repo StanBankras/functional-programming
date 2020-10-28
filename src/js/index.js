@@ -1,6 +1,6 @@
 import clean from './cleanup';
 import apiData from './utils/apidata';
-import esri from './utils/esri';
+import esri from './esri';
 import { getCenterCoord, getData, isCoordInPolygon } from './utils/general';
 
 const endpoints = [
@@ -10,7 +10,7 @@ const endpoints = [
 const sharedKey = 'areaid';
 const keys = {
   areageometryastext: 'area',
-  chargingpointcapacity: 'chargingPoints',
+  // chargingpointcapacity: 'chargingPoints',
   areaid: 'areaId'
 }
 const strictKeys = true;
@@ -67,12 +67,16 @@ function getEnvironmentalZones() {
 }
 
 async function getTariffs(areaId) {
-  console.log('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId);
-  const uuidReq = await getData('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId); // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-PARKEERGEBIED/mz4f-59fw
-  if(!uuidReq || !uuidReq[0].uuid) return null;
+  try {
+    const uuidReq = await getData('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId); // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-PARKEERGEBIED/mz4f-59fw
+    if(!uuidReq || !uuidReq[0] || !uuidReq[0].uuid) return null;
+  
+    const uuidData = await getData('https://npropendata.rdw.nl//parkingdata/v2/static/' + uuidReq[0].uuid);
+    if(!uuidData) return null;
 
-  const uuidData = await getData('https://npropendata.rdw.nl//parkingdata/v2/static/' + uuidReq[0].uuid);
-  if(!uuidData) return null;
-
-  return (uuidData.parkingFacilityInformation.tariffs || []);
+    return (uuidData.parkingFacilityInformation.tariffs || []);
+  } catch(err) {
+    console.log(err);
+    return null;
+  };
 }
