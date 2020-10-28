@@ -3,11 +3,20 @@ _Cleaning raw survey data so it becomes usable_
 
 During the functional programming course @CMDA-TT, the goal is to write code that cleans data with functional patterns. One of the most important things however is to describe the used patterns and show my understand and progress in the subject.
 
+## Research question
+**Do cities provide extra infrastructure and facilities on parking spots in environment zones to promote (more) green transportation?**
+
+Subquestions:
+
+* Are parkingspots closer to public transport to continue your travel this way?
+* Do parkingspots generally have more charging points for electrical cars?
+* Are parkingspot in environment zones with more charging points more expensive to park?
+
 ## Usage
 If you are cleaning survey data, you might be able to use this project as a template to start writing functional patterns right away. There are some requirements to running this project, which will be explained in the 'Installation' part of the readme.
 
 ### What can this project be used for?
-If you have JSON data readily available of any kind of survey, this project allows you to easily read that JSON with Javascript and start writing functional patterns to clean that data up right away.
+If you have JSON data readily available of any kind of survey, this project contains some functions and methods that might help you clean up your data.
 
 ## Installation
 Here's how to start using this project.
