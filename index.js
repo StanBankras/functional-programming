@@ -7,6 +7,7 @@ const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
   'https://opendata.rdw.nl/resource/b3us-f26s.json' // Charging points
 ]
+const sharedKey = 'areaid';
 const keys = {
   areageometryastext: 'area',
   chargingpointcapacity: 'chargingPoints'
@@ -17,7 +18,7 @@ const strictKeys = true;
 mergeAllData().then(result => console.log(result));
 
 async function mergeAllData() {
-  const dataset = apiData.newDataset(endpoints, 'areaid');
+  const dataset = apiData.newDataset(endpoints, sharedKey);
 
   const requestedData = await Promise.all([getEnvironmentalZones(), dataset]);
   const data = requestedData[1];
