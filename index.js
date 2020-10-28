@@ -16,7 +16,7 @@ esri.getEnvironmentalZones().then(result => {
   result.forEach(x => {
     x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
   });
-  mergeAllData(polygons).then(result => console.log(result.filter(x => x.chargingPoints && x.environmentalZone)));
+  mergeAllData(polygons).then(result => console.log(result.filter(x => x.chargingPoints)));
 });
 
 async function mergeAllData(environmentalZones) {
