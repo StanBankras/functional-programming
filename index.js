@@ -51,14 +51,12 @@ Main question:
 Do cities provide extra infrastructure and facilities on parking spots in environment zones to promote (more) green transportation?
 - Are parkingspots closer to public transport to continue your travel this way?
 - Do parkingspots have more charging points for electrical cars?
-- Is there a maximum parking time that prevents electric car owners from leaving their car on the charging point for too long?
 - Are parkingspot in environment zones with more charging points more expensive to park?
 
 Code idea:
 1. Gather all parkingspots that have:
     - Geo data
     - Amount of charging points
-    - (max) park time
     - Tariffs
 2. Gather the environment zone coordinates in polygon
 3. Create two different arrays:
