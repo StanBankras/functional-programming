@@ -1,7 +1,7 @@
-import clean from './cleanup.js';
-import apiData from './apidata.js';
-import esri from './esri';
-import { getCenterCoord, isCoordInPolygon } from './utils';
+import clean from './cleanup';
+import apiData from './utils/apidata';
+import esri from './utils/esri';
+import { getCenterCoord, isCoordInPolygon } from './utils/general';
 
 const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
