@@ -9,6 +9,7 @@ const keys = {
   areageometryastext: 'area',
   chargingpointcapacity: 'chargingPoints'
 }
+const strictKeys = true;
 
 // Start code, retrieves data using Esri about Dutch environmental zones. Same data is used as on milieuzones.nl
 esri.getEnvironmentalZones().then(result => {
@@ -16,18 +17,21 @@ esri.getEnvironmentalZones().then(result => {
   result.forEach(x => {
     x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
   });
-  mergeAllData(polygons).then(result => console.log(result.filter(x => x.chargingPoints)));
+  mergeAllData(polygons).then(result => console.log(result));
 });
 
 async function mergeAllData(environmentalZones) {
   const data = await apiData.newDataset([geoDataEndpoint, chargingPointEndpoint], 'areaid');
 
   const filteredData = data
-    .filter(x => Object.keys(keys).every(key => x.hasOwnProperty(key))) // https://stackoverflow.com/a/41439924
+    .filter(x => Object.keys(keys).every(key => {
+      if(strictKeys) return x.hasOwnProperty(key); // https://stackoverflow.com/a/41439924
+      return true;
+    })) 
     .map(x => {
       const obj = {};
       Object.keys(keys).forEach(key => {
-        return obj[keys[key]] = x[key];
+        return obj[keys[key]] = (x[key] || '');
       });
       return obj;
     })
