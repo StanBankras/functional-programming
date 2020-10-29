@@ -10,13 +10,13 @@ const endpoints = [
 const sharedKey = 'areaid';
 const keys = {
   areageometryastext: 'area',
-  // chargingpointcapacity: 'chargingPoints',
+  chargingpointcapacity: 'chargingPoints',
   areaid: 'areaId'
 }
 const strictKeys = true;
 
 // Starts the process to get and clean data
-mergeAllData().then(result => console.log(result));
+mergeAllData().then(result => console.log(result.filter(x => typeof x.tariffs !== 'undefined').map(x => Object.values(x.tariffs)[Object.values(x.tariffs).length-1])));
 
 async function mergeAllData() {
   const dataset = apiData.newDataset(endpoints, sharedKey);
@@ -74,9 +74,53 @@ async function getTariffs(areaId) {
     const uuidData = await getData('https://npropendata.rdw.nl//parkingdata/v2/static/' + uuidReq[0].uuid);
     if(!uuidData) return null;
 
-    return (uuidData.parkingFacilityInformation.tariffs || []);
+    return formatTariffData((uuidData.parkingFacilityInformation.tariffs || []));
   } catch(err) {
     console.log(err);
     return null;
   };
+}
+
+function formatTariffData(tariffs) {
+  const tariffObj = {};
+
+  tariffs.forEach(tariff => {
+    if(notExpiredTariff(tariff)) {
+      tariff.validityDays.forEach(day => {
+        const dayKey = day.split(' ').join('').toLowerCase();
+        if(tariffObj[dayKey]) return;
+        tariffObj[dayKey] = {};
+        tariffObj[dayKey].validFrom = tariff.validityFromTime;
+        tariffObj[dayKey].validUntil = tariff.validityUntilTime;
+        tariffObj[dayKey].rateInterval = tariff.intervalRates;
+        tariffObj[dayKey].averageTariff = getAverageTariff(tariff);
+      });
+    }
+  });
+
+  return tariffObj;
+}
+
+// Returns boolean true if tariff is currently valid
+function notExpiredTariff(tariff) {
+  return tariff.startOfPeriod * 1000 < Date.now() && (tariff.endOfPeriod * 1000 > Date.now() || !tariff.endOfPeriod || tariff.endOfPeriod === -1);
+}
+
+function getAverageTariff(tariff) {
+  if(!tariff.intervalRates) return null;
+
+  const minutesInDay = 1440;
+  let weightedTotalCharge = 0;
+  let totalMinutes = 0;
+
+  tariff.intervalRates.forEach(rate => {
+    const minutes = rate.durationUntil === -1 ? minutesInDay - rate.durationFrom : rate.durationUntil - rate.durationFrom;
+    const charge = rate.charge
+    const chargePeriod = rate.chargePeriod;
+    const weightedCharge = charge * minutes / chargePeriod;
+    weightedTotalCharge += weightedCharge;
+    totalMinutes += minutes;
+  });
+
+  return weightedTotalCharge / totalMinutes;
 }
