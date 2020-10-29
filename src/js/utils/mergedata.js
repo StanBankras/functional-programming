@@ -1,4 +1,4 @@
-import { getData } from './general';
+import { getData } from './helpers';
 
 // Gets datasets from endpoints and waits till all are retrieved, then calls the function to combine this data
 function newDataset(endpoints, sharedKey) {

@@ -1,9 +1,8 @@
 import clean from './cleanup';
-import apiData from './utils/apidata';
+import apiData from './utils/mergedata';
 import esri from './esri';
 import * as tariffsArr from '../assets/data/tariffs.json';
-import fs from 'file-system';
-import { getCenterCoord, getData, isCoordInPolygon } from './utils/general';
+import { getCenterCoord, getData, isCoordInPolygon } from './utils/helpers';
 
 const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
@@ -20,8 +19,10 @@ const strictKeys = false;
 const tariffsArray = tariffsArr.default;
 
 // Starts the process to get and clean data
+console.time('Time taken')
 mergeAllData().then(result => {
   console.log(result.filter(x => typeof x.tariffs !== 'undefined'));
+  console.timeEnd('Time taken')
 });
 
 async function mergeAllData() {

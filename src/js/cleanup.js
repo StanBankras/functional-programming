@@ -1,7 +1,7 @@
 import * as json from '../assets/data/survey.json';
 import * as kleuren from '../assets/data/kleuren.json';
 import * as huisdieren from '../assets/data/huisdieren.json';
-import { replaceOccurences, replaceMultipleOccurences } from './utils/general';
+import { replaceOccurences, replaceMultipleOccurences } from './utils/helpers';
 import isColor from 'is-color';
 import rgbHex from 'rgb-hex';
 
