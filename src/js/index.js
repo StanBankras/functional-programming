@@ -1,6 +1,8 @@
 import clean from './cleanup';
 import apiData from './utils/apidata';
 import esri from './esri';
+import * as tariffsArr from '../assets/data/tariffs.json';
+import fs from 'file-system';
 import { getCenterCoord, getData, isCoordInPolygon } from './utils/general';
 
 const endpoints = [
@@ -13,10 +15,14 @@ const keys = {
   chargingpointcapacity: 'chargingPoints',
   areaid: 'areaId'
 }
-const strictKeys = true;
+const strictKeys = false;
+
+const tariffsArray = tariffsArr.default;
 
 // Starts the process to get and clean data
-mergeAllData().then(result => console.log(result.filter(x => typeof x.tariffs !== 'undefined')));
+mergeAllData().then(result => {
+  console.log(result.filter(x => typeof x.tariffs !== 'undefined'));
+});
 
 async function mergeAllData() {
   const dataset = apiData.newDataset(endpoints, sharedKey);
@@ -50,7 +56,11 @@ async function mergeAllData() {
     .map(async (x) => {
       const obj = x;
       obj.tariffs = await getTariffs(obj.areaId);
-      obj.overallAverageTariff = Object.values(obj.tariffs).map(x => x.averageTariff).reduce((prev, cur) => prev + cur, 0) / Object.keys(obj.tariffs).length;
+      if(obj.tariffs) {;
+        obj.overallAverageTariff = Object.values(obj.tariffs)
+          .map(x => x.averageTariff)
+          .reduce((prev, cur) => prev + cur, 0) / Object.keys(obj.tariffs).length;
+      }
       return obj;
     });
 
@@ -61,7 +71,8 @@ function getEnvironmentalZones() {
   return esri.getEnvironmentalZones().then(result => {
     const polygons = [];
     result.forEach(x => {
-      x.polygons.forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
+      x.polygons
+        .forEach(polygon => polygons.push({ municipality: x.municipality, polygon: polygon }));
     });
     return polygons;
   });
@@ -69,6 +80,7 @@ function getEnvironmentalZones() {
 
 async function getTariffs(areaId) {
   try {
+    if(tariffsArray[areaId]) return formatTariffData(tariffsArray[areaId]);
     const uuidReq = await getData('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId); // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-PARKEERGEBIED/mz4f-59fw
     if(!uuidReq || !uuidReq[0] || !uuidReq[0].uuid) return null;
   
