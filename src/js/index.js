@@ -16,7 +16,7 @@ const keys = {
 const strictKeys = true;
 
 // Starts the process to get and clean data
-mergeAllData().then(result => console.log(result.filter(x => typeof x.tariffs !== 'undefined').map(x => Object.values(x.tariffs)[Object.values(x.tariffs).length-1])));
+mergeAllData().then(result => console.log(result.filter(x => typeof x.tariffs !== 'undefined')));
 
 async function mergeAllData() {
   const dataset = apiData.newDataset(endpoints, sharedKey);
@@ -50,6 +50,7 @@ async function mergeAllData() {
     .map(async (x) => {
       const obj = x;
       obj.tariffs = await getTariffs(obj.areaId);
+      obj.overallAverageTariff = Object.values(obj.tariffs).map(x => x.averageTariff).reduce((prev, cur) => prev + cur, 0) / Object.keys(obj.tariffs).length;
       return obj;
     });
 
@@ -89,11 +90,12 @@ function formatTariffData(tariffs) {
       tariff.validityDays.forEach(day => {
         const dayKey = day.split(' ').join('').toLowerCase();
         if(tariffObj[dayKey]) return;
-        tariffObj[dayKey] = {};
-        tariffObj[dayKey].validFrom = tariff.validityFromTime;
-        tariffObj[dayKey].validUntil = tariff.validityUntilTime;
-        tariffObj[dayKey].rateInterval = tariff.intervalRates;
-        tariffObj[dayKey].averageTariff = getAverageTariff(tariff);
+        tariffObj[dayKey] = {
+          validFrom: tariff.validityFromTime,
+          validUntil: tariff.validityUntilTime,
+          rateInterval: tariff.rateIntervals,
+          averageTariff: getAverageTariffPerDay(tariff)
+        };
       });
     }
   });
@@ -106,7 +108,8 @@ function notExpiredTariff(tariff) {
   return tariff.startOfPeriod * 1000 < Date.now() && (tariff.endOfPeriod * 1000 > Date.now() || !tariff.endOfPeriod || tariff.endOfPeriod === -1);
 }
 
-function getAverageTariff(tariff) {
+// To-do: add other time formats (seconds, hours)
+function getAverageTariffPerDay(tariff) {
   if(!tariff.intervalRates) return null;
 
   const minutesInDay = 1440;
