@@ -1,6 +1,8 @@
 # Functional Programming
 _Cleaning raw survey data so it becomes usable_
 
+// The sketch of the visualization of my project will be here soon...
+
 ## Description
 
 During the functional programming course @CMDA-TT, the goal is to write code that cleans data with functional patterns. One of the most important things however is to describe the used patterns and show my understanding and progress in the subject.

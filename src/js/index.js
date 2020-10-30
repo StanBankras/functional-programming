@@ -5,8 +5,8 @@ import * as tariffsArr from '../assets/data/tariffs.json';
 import { getCenterCoord, getData, isCoordInPolygon } from './utils/helpers';
 
 const endpoints = [
-  'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas
-  'https://opendata.rdw.nl/resource/b3us-f26s.json' // Charging points
+  'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
+  'https://opendata.rdw.nl/resource/b3us-f26s.json' // Charging points // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-SPECIFICATIES-PARKEERGEBIED/b3us-f26s
 ]
 const sharedKey = 'areaid';
 const keys = {
@@ -14,14 +14,14 @@ const keys = {
   chargingpointcapacity: 'chargingPoints',
   areaid: 'areaId'
 }
-const strictKeys = false;
+const strictKeys = true;
 
 const tariffsArray = tariffsArr.default;
 
 // Starts the process to get and clean data
 console.time('Time taken')
 mergeAllData().then(result => {
-  console.log(result.filter(x => typeof x.tariffs !== 'undefined'));
+  console.log(JSON.stringify(result.filter(x => typeof x.tariffs !== 'undefined')));
   console.timeEnd('Time taken')
 });
 
