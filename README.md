@@ -29,11 +29,9 @@ _My expectation:_ I expect the cost of parking to be higher if there are more ch
 [Data I expect to use to answer the questions can be found here](https://github.com/StanBankras/functional-programming/wiki/Concept#data-i-expect-to-use)
 
 
-## Usage
-If you are cleaning survey data, you might be able to use this project as a template to start writing functional patterns right away. There are some requirements to running this project, which will be explained in the 'Installation' part of the readme.
-
-### What can this project be used for?
-If you have JSON data readily available of any kind of survey, this project contains some functions and methods that might help you clean up your data.
+## Most interesting functions
+* Getting tariff data per parking area: [click here](https://github.com/StanBankras/functional-programming/wiki/Parking-tariffs)
+* Combining all data from 4 datapoints: [click here](https://github.com/StanBankras/functional-programming/wiki/Main-function-to-merge-all-data)
 
 ## Installation
 Here's how to start using this project.
