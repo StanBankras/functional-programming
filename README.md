@@ -1,7 +1,11 @@
 # Functional Programming
 _Cleaning raw survey data so it becomes usable_
 
-During the functional programming course @CMDA-TT, the goal is to write code that cleans data with functional patterns. One of the most important things however is to describe the used patterns and show my understand and progress in the subject.
+## Description
+
+During the functional programming course @CMDA-TT, the goal is to write code that cleans data with functional patterns. One of the most important things however is to describe the used patterns and show my understanding and progress in the subject.
+
+During the Tech Track, I will be working on a data research for De Volkskrant about parking in Dutch cities.
 
 ## Research question
 **Do cities provide extra infrastructure and facilities on parking spots in environment zones to promote (more) green transportation?**
