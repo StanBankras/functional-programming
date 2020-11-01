@@ -21,7 +21,7 @@ const tariffsArray = tariffsArr.default;
 // Starts the process to get and clean data
 console.time('Time taken')
 mergeAllData().then(result => {
-  console.log(result.filter(x => typeof x.tariffs !== 'undefined'));
+  console.log(result.filter(x => x.environmentalZone && x.overallAverageTariff && x.chargingPoints === '1'));
   console.timeEnd('Time taken')
 });
 
