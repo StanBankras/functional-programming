@@ -13,6 +13,7 @@
     "@esri/arcgis-rest-auth": "^2.20.0",
     "@esri/arcgis-rest-request": "^2.20.0",
     "cross-fetch": "^3.0.6",
+    "d3": "^6.2.0",
     "dotenv": "^8.2.0",
     "is-color": "^1.0.2",
     "isomorphic-form-data": "^2.0.0",
@@ -24,6 +25,7 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.12.1",
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "sass": "^1.28.0"
   }
 }
