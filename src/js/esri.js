@@ -11,7 +11,7 @@ const uri = 'https://services.arcgis.com/kE0BiyvJHb5SwQv7/arcgis/rest/services/M
 
 export async function getEnvironmentalZones() {
   try {
-    const data = await request(uri + '00');
+    const data = await request(uri);
     let formattedData = data.features.map(feature => {
       const coordinates = feature.geometry.coordinates;
       let polygons;

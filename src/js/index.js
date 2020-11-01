@@ -1,8 +1,8 @@
 import clean from './cleanup';
 import apiData from './utils/mergedata';
 import esri from './esri';
-import * as tariffsArr from '../assets/data/tariffs.json';
 import { getCenterCoord, getData, isCoordInPolygon } from './utils/helpers';
+import * as tariffJson from '../assets/data/tariffsFormatted.json';
 
 const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
@@ -14,14 +14,14 @@ const keys = {
   chargingpointcapacity: 'chargingPoints',
   areaid: 'areaId'
 }
-const strictKeys = true;
+const strictKeys = false;
 
-const tariffsArray = tariffsArr.default;
+const tariffsObject = tariffJson.default;
 
 // Starts the process to get and clean data
 console.time('Time taken')
 mergeAllData().then(result => {
-  console.log(result.filter(x => x.environmentalZone && x.overallAverageTariff && x.chargingPoints === '1'));
+  console.log(result);
   console.timeEnd('Time taken')
 });
 
@@ -40,7 +40,7 @@ async function mergeAllData() {
     .map(x => {
       const obj = {};
       Object.keys(keys).forEach(key => {
-        return obj[keys[key]] = (x[key] || '');
+        return obj[keys[key]] = (x[key] || undefined);
       });
       return obj;
     })
@@ -57,11 +57,10 @@ async function mergeAllData() {
     .map(async (x) => {
       const obj = x;
       obj.tariffs = await getTariffs(obj.areaId);
-      if(obj.tariffs) {;
-        obj.overallAverageTariff = Object.values(obj.tariffs)
-          .map(x => x.averageTariff)
-          .reduce((prev, cur) => prev + cur, 0) / Object.keys(obj.tariffs).length;
-      }
+      obj.overallAverageTariff = Object.values(obj.tariffs || [])
+        .map(x => x.averageTariff)
+        .reduce((prev, cur) => prev + cur, 0) / Object.keys(obj.tariffs || []).length;
+
       return obj;
     });
 
@@ -81,7 +80,8 @@ function getEnvironmentalZones() {
 
 async function getTariffs(areaId) {
   try {
-    if(tariffsArray[areaId]) return formatTariffData(tariffsArray[areaId]);
+    if(tariffsObject.hasOwnProperty(areaId)) return tariffsObject[areaId];
+    console.log(areaId);
     const uuidReq = await getData('https://opendata.rdw.nl/resource/mz4f-59fw.json?areaid=' + areaId); // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-PARKEERGEBIED/mz4f-59fw
     if(!uuidReq || !uuidReq[0] || !uuidReq[0].uuid) return null;
   
@@ -107,7 +107,7 @@ function formatTariffData(tariffs) {
           validFrom: tariff.validityFromTime,
           validUntil: tariff.validityUntilTime,
           rateInterval: tariff.rateIntervals,
-          averageTariff: getAverageTariffPerDay(tariff)
+          averageTariff: getAverageTariffPerMinute(tariff)
         };
       });
     }
@@ -122,7 +122,7 @@ function notExpiredTariff(tariff) {
 }
 
 // To-do: add other time formats (seconds, hours)
-function getAverageTariffPerDay(tariff) {
+function getAverageTariffPerMinute(tariff) {
   if(!tariff.intervalRates) return null;
 
   const minutesInDay = 1440;

@@ -34,6 +34,7 @@ export async function getData(uriString) {
 }
 
 export function getCenterCoord(coordinates) {
+  if(!coordinates) return [];
   const type = coordinates.split(' ')[0];
   let longLat = replaceMultipleOccurences(coordinates, [type + ' (', '(', ')', ','], '').split(' ');
   if(type === 'POINT') {
