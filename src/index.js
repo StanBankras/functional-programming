@@ -1,8 +1,10 @@
-import clean from './cleanup';
-import apiData from './utils/mergedata';
-import esri from './esri';
-import { getCenterCoord, getData, isCoordInPolygon } from './utils/helpers';
-import * as tariffJson from '../assets/data/tariffsFormatted.json';
+import 'regenerator-runtime/runtime';
+import apiData from './js/utils/mergedata';
+import esri from './js/esri';
+import { getCenterCoord, getData, isCoordInPolygon } from './js/utils/helpers';
+import d3 from './js/d3';
+
+import * as tariffJson from './assets/data/tariffsFormatted.json';
 
 const endpoints = [
   'https://opendata.rdw.nl/resource/nsk3-v9n7.json', // geoData parking areas // https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-GEOMETRIE-GEBIED/nsk3-v9n7
@@ -18,10 +20,14 @@ const strictKeys = false;
 
 const tariffsObject = tariffJson.default;
 
+let data = undefined;
+
 // Starts the process to get and clean data
 console.time('Time taken')
 mergeAllData().then(result => {
+  data = result;
   console.log(result);
+  d3(data);
   console.timeEnd('Time taken')
 });
 
