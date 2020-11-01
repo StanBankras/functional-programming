@@ -21,7 +21,7 @@ const tariffsArray = tariffsArr.default;
 // Starts the process to get and clean data
 console.time('Time taken')
 mergeAllData().then(result => {
-  console.log(JSON.stringify(result.filter(x => typeof x.tariffs !== 'undefined')));
+  console.log(result.filter(x => typeof x.tariffs !== 'undefined'));
   console.timeEnd('Time taken')
 });
 
